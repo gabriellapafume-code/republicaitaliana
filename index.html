@@ -328,5 +328,226 @@ function modalEstudiante(){
 
   const bloqueGeneral=()=>{
     if(esEsp)return"";
-    const bEsc=()=>{if(!["1°","2°","3°"].includes(g))return"";return`<div style="margin-bottom:18px"><div style="font-weight:700;color:#7c3aed;font-size:13px;margin-bottom:10px;padding-left:10px;border-left:3px solid #7c3aed">✍️ Nivel de Escritura (Kauffman)</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">${CORTES.map(c=>{const v=e[`escritura_${c}`]||"";return`<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div s
+    const bEsc=()=>{if(!["1°","2°","3°"].includes(g))return"";return`<div style="margin-bottom:18px"><div style="font-weight:700;color:#7c3aed;font-size:13px;margin-bottom:10px;padding-left:10px;border-left:3px solid #7c3aed">✍️ Nivel de Escritura (Kauffman)</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">${CORTES.map(c=>{const v=e[`escritura_${c}`]||"";return`<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div style="font-size:11px;color:#7c3aed;margin-bottom:5px;font-weight:700">📅 ${c}</div><select data-key="escritura_${c}" onchange="updateExtra('escritura_${c}',this.value)" style="font-size:11px;font-weight:700;border-radius:8px;padding:4px 6px;border:1.5px solid #7c3aed44;background:#f5f3ff;color:#7c3aed;width:auto"><option value="">— nivel —</option>${NIV_ESCRITURA.map(n=>`<option ${v===n?"selected":""}>${n}</option>`).join("")}</select></div>`;}).join("")}</div></div>`;};
+    const bLec=()=>{if(!["1°","2°"].includes(g))return"";return`<div style="margin-bottom:18px"><div style="font-weight:700;color:#db2877;font-size:13px;margin-bottom:10px;padding-left:10px;border-left:3px solid #db2877">📖 Nivel de Lectura</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">${CORTES.map(c=>{const v=e[`lectura12_${c}`]||"";return`<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div style="font-size:11px;color:#db2877;margin-bottom:5px;font-weight:700">📅 ${c}</div><select data-key="lectura12_${c}" onchange="updateExtra('lectura12_${c}',this.value)" style="font-size:11px;font-weight:700;border-radius:8px;padding:4px 6px;border:1.5px solid #db287744;background:#fdf2f8;color:#db2877;width:auto"><option value="">— nivel —</option>${NIV_LECTURA_12.map(n=>`<option ${v===n?"selected":""}>${n}</option>`).join("")}</select></div>`;}).join("")}</div></div>`;};
+    const bFlu=()=>{if(!["3°","4°","5°","6°"].includes(g))return"";return`<div style="margin-bottom:18px"><div style="font-weight:700;color:#0ea5e9;font-size:13px;margin-bottom:10px;padding-left:10px;border-left:3px solid #0ea5e9">📖 Fluidez Lectora</div>${["Velocidad","Precisión","Prosodia"].map(dim=>`<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:#475569;margin-bottom:6px">${dim}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">${CORTES.map(c=>{const k=`fluidez_${dim}_${c}`;const v=e[k]||"";return`<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div style="font-size:11px;color:#0ea5e9;margin-bottom:5px;font-weight:700">📅 ${c}</div><select data-key="${k}" onchange="updateExtra('${k}',this.value)" style="font-size:11px;font-weight:700;border-radius:8px;padding:4px 6px;border:1.5px solid #0ea5e944;background:#f0f9ff;color:#0ea5e9;width:auto"><option value="">— logro —</option>${LOGRO.map(l=>`<option ${v===l?"selected":""}>${l}</option>`).join("")}</select></div>`;}).join("")}</div></div>`).join("")}</div>`;};
+    const bInd=(area,color,emoji)=>{const inds=INDS[area][g]||[];if(!inds.length)return"";return`<div style="margin-bottom:18px"><div style="font-weight:700;color:${color};font-size:13px;margin-bottom:10px;padding-left:10px;border-left:3px solid ${color}">${emoji} ${area==="lengua"?"Lengua":"Matemática"}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${inds.map(ind=>{const k=`${area}_${g}_${ind}`,v=e.indicadores?.[k]||"";const bg=v?{Consolidado:"#f0fdf4","En proceso":"#fffbeb",Incipiente:"#fef2f2"}[v]:"#f8fafc";const fg=v?{Consolidado:"#16a34a","En proceso":"#d97706",Incipiente:"#dc2626"}[v]:"#94a3b8";return`<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div style="font-size:11px;color:#475569;margin-bottom:5px;font-weight:600">${ind}</div><select data-ind="${k}" onchange="updateInd('${k}',this.value)" style="background:${bg};color:${fg};border:1.5px solid ${fg}44;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Source Sans 3',sans-serif;width:auto"><option value="">— seleccionar —</option>${LOGRO.map(l=>`<option value="${l}" ${v===l?"selected":""}>${l}</option>`).join("")}</select></div>`;}).join("")}</div></div>`;};
+    return bEsc()+bLec()+bFlu()+bInd("lengua","#6366f1","📚")+bInd("matematica","#0ea5e9","🔢");
+  };
 
+  return`<div class="modal-overlay" onclick="if(event.target===this)cerrarModal()">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <h3 style="font-family:'Playfair Display',serif;margin:0;font-size:18px;color:#1e293b">${m.mode==="new"?"Nuevo":"Editar"} estudiante · ${STATE.seccion.label}</h3>
+        <button onclick="cerrarModal()" style="background:none;border:none;font-size:26px;cursor:pointer;color:#94a3b8">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 90px 70px 110px;gap:10px;margin-bottom:16px">
+        <div><label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;text-transform:uppercase">Apellido</label><input id="m-apellido" value="${e.apellido}" placeholder="Apellido"/></div>
+        <div><label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;text-transform:uppercase">Nombre</label><input id="m-nombre" value="${e.nombre}" placeholder="Nombre"/></div>
+        <div><label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;text-transform:uppercase">Grado</label>
+          <select id="m-grado" onchange="cambiarGrado(this.value)"><option value="">—</option>${GRADOS.map(gr=>`<option ${e.grado===gr?"selected":""}>${gr}</option>`).join("")}</select></div>
+        <div><label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;text-transform:uppercase">Secc.</label>
+          <select id="m-seccion" style="width:auto"><option value="">—</option>${SECCIONES.map(s=>`<option ${(e.seccion||"")===s?"selected":""}>${s}</option>`).join("")}</select></div>
+        <div><label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;text-transform:uppercase">DNI</label><input id="m-dni" value="${e.dni||""}" placeholder="12345678" maxlength="8"/></div>
+      </div>
+      <div style="background:#fdf4ff;border:1.5px solid #f0abfc;border-radius:12px;padding:14px;margin-bottom:18px">
+        <div style="font-size:12px;font-weight:700;color:#a21caf;margin-bottom:10px">♿ ¿Tiene ajustes razonables? (Res. 311/16 CFE)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="toggleMarca('')" style="padding:6px 14px;border-radius:8px;border:1.5px solid;font-weight:700;font-size:12px;cursor:pointer;font-family:'Source Sans 3',sans-serif;border-color:${!e.marca?"#1e293b":"#e2e8f0"};background:${!e.marca?"#1e293b":"#fff"};color:${!e.marca?"#fff":"#475569"}">Sin ajustes</button>
+          ${MARCAS.map(mc=>{const cols={"CUD":"#7c3aed","PPI":"#0ea5e9","MEMO2":"#ea580c"};const col=cols[mc];return`<button onclick="toggleMarca('${mc}')" style="padding:6px 14px;border-radius:8px;border:1.5px solid;font-weight:700;font-size:12px;cursor:pointer;font-family:'Source Sans 3',sans-serif;border-color:${e.marca===mc?col:"#e2e8f0"};background:${e.marca===mc?col:"#fff"};color:${e.marca===mc?"#fff":"#475569"}">♿ ${mc}</button>`;}).join("")}
+        </div>
+      </div>
+      ${bloqueAjuste()}${bloqueGeneral()}
+      <div style="margin-top:14px">
+        <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;text-transform:uppercase">📝 Trayectoria / Observaciones</label>
+        <textarea id="m-trayectoria" rows="3" placeholder="Redactá la trayectoria del estudiante...">${e.trayectoria||""}</textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+        <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn-primary" onclick="guardarEstudiante()">Guardar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function modalConfirmarBorrar(){
+  const e=STATE.del;
+  return`<div class="modal-overlay"><div style="background:#fff;border-radius:14px;padding:28px;max-width:360px;width:90vw">
+    <p style="font-weight:700;margin-bottom:8px">¿Eliminar a <b>${e.apellido}, ${e.nombre}</b>?</p>
+    <p style="font-size:13px;color:#64748b;margin-bottom:20px">Esta acción no se puede deshacer.</p>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="setState({del:null})">Cancelar</button>
+      <button class="btn-primary" onclick="borrarEstudiante()" style="background:#ef4444">Eliminar</button>
+    </div>
+  </div></div>`;
+}
+
+function vistaDirectivo(){
+  const g=STATE.dirGrado,s=STATE.dirSeccion;
+  const secId=`${g}${s}`;
+  const ests=STATE.allData[secId]||[];
+  const especiales=ests.filter(e=>e.marca);
+  const regulares=ests.filter(e=>!e.marca);
+  return`${header("Vista Directivo · "+CONFIG.nombreEscuela,"Trayectorias Cuidadas · Aprendizajes Significativos")}
+  <div style="padding:24px;max-width:1400px;margin:0 auto">
+    ${leyenda()}
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:flex-end">
+      <div><div style="font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase">Grado</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${GRADOS.map(gr=>`<button onclick="setState({dirGrado:'${gr}'})" style="padding:7px 14px;border-radius:8px;border:1.5px solid;font-weight:700;font-size:12px;cursor:pointer;font-family:'Source Sans 3',sans-serif;border-color:${g===gr?"#ea580c":"#e2e8f0"};background:${g===gr?"#ea580c":"#fff"};color:${g===gr?"#fff":"#475569"}">${gr}</button>`).join("")}
+        </div>
+      </div>
+      <div><div style="font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase">Sección</div>
+        <div style="display:flex;gap:6px">
+          ${SECCIONES.map(sc=>`<button onclick="setState({dirSeccion:'${sc}'})" style="padding:7px 16px;border-radius:8px;border:1.5px solid;font-weight:700;font-size:12px;cursor:pointer;font-family:'Source Sans 3',sans-serif;border-color:${s===sc?"#7c2d12":"#e2e8f0"};background:${s===sc?"#7c2d12":"#fff"};color:${s===sc?"#fff":"#475569"}">Sección ${sc}</button>`).join("")}
+        </div>
+      </div>
+      ${selectorCorte()}
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 16px #0001;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;color:#1e293b">${g} Sección ${s}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span style="background:#fff7ed;color:#ea580c;border-radius:8px;padding:4px 12px;font-size:12px;font-weight:700">👥 ${ests.length} total</span>
+          <span style="background:#fdf4ff;color:#a21caf;border-radius:8px;padding:4px 12px;font-size:12px;font-weight:700">♿ ${especiales.length} con ajustes</span>
+        </div>
+      </div>
+      ${STATE.loading?loader():ests.length===0?`<div style="text-align:center;padding:32px;color:#94a3b8;border:2px dashed #fdba74;border-radius:12px">Sin datos</div>`:`
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <div style="flex:1;min-width:200px;background:#fff7ed;border:1px solid #fdba7444;border-radius:12px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:#ea580c;margin-bottom:8px">📚 LENGUA · Semáforo</div>
+          ${semaforo(regulares,"lengua",g)}
+        </div>
+        <div style="flex:1;min-width:200px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:#0369a1;margin-bottom:8px">🔢 MATEMÁTICA · Semáforo</div>
+          ${semaforo(regulares,"matematica",g)}
+        </div>
+        ${especiales.length>0?`<div style="flex:1;min-width:200px;background:#fdf4ff;border:1px solid #f0abfc;border-radius:12px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:#a21caf;margin-bottom:8px">♿ Con ajustes razonables</div>
+          ${especiales.map(e=>`<div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${e.apellido}, ${e.nombre} ${badgeMarca(e.marca)}</div>`).join("")}
+        </div>`:""}
+      </div>`}
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 16px #0001">
+      <div style="font-family:'Playfair Display',serif;font-size:16px;color:#1e293b;margin-bottom:16px">📊 ${g} Grado · Todas las secciones</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        ${SECCIONES.map(sc=>{
+          const sid=`${g}${sc}`;
+          const total=(STATE.allData[sid]||[]).length;
+          const esp=(STATE.allData[sid]||[]).filter(e=>e.marca).length;
+          const reg=(STATE.allData[sid]||[]).filter(e=>!e.marca);
+          return`<div style="background:#fff7ed;border-radius:12px;padding:16px;border:1.5px solid #fdba7444;cursor:pointer" onclick="setState({dirSeccion:'${sc}'})">
+            <div style="font-weight:700;font-size:15px;color:#1e293b;margin-bottom:8px">${g} Sección ${sc}</div>
+            <div style="font-size:24px;font-weight:900;color:${total>0?"#ea580c":"#cbd5e1"}">${total} <span style="font-size:12px;font-weight:400;color:#94a3b8">estudiantes</span></div>
+            ${esp>0?`<div style="font-size:12px;color:#a21caf;font-weight:700;margin-top:4px">♿ ${esp} con ajustes</div>`:""}
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:10px;font-weight:700;color:#ea580c">📚 Lengua</div>
+              ${semaforo(reg,"lengua",g)}
+              <div style="font-size:10px;font-weight:700;color:#0369a1;margin-top:4px">🔢 Matemática</div>
+              ${semaforo(reg,"matematica",g)}
+            </div>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+function imprimirSeccion(){
+  let ests=(STATE.allData[STATE.seccion.id]||[]).sort((a,b)=>a.apellido.localeCompare(b.apellido));
+  if(STATE.filtroMarca==="especiales")ests=ests.filter(e=>e.marca);
+  else if(STATE.filtroMarca==="regulares")ests=ests.filter(e=>!e.marca);
+  if(!ests.length){alert("No hay estudiantes.");return;}
+  generarPDF(ests,STATE.seccion);
+}
+function descargarFicha(e){generarPDF([e],STATE.seccion);}
+
+function generarPDF(ests,sec){
+  const g=sec.grado;const iL=INDS.lengua[g]||[],iM=INDS.matematica[g]||[];
+  const cL=v=>v==="Consolidado"?"#16a34a":v==="En proceso"?"#d97706":v==="Incipiente"?"#dc2626":"#94a3b8";
+  const cA=v=>v==="Logrado"?"#16a34a":v==="En proceso"?"#d97706":v==="Requiere acompañamiento"?"#a21caf":"#94a3b8";
+  const cN=v=>{const m={"Diferenciada":"#7c3aed","Silábica":"#db2877","Silábica alfabética":"#ea580c","Cuasialfabética":"#d97706","Alfabética":"#16a34a"};return m[v]||"#475569";};
+  const win=window.open("","_blank");
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Ficha · ${ests.length===1?ests[0].apellido+", "+ests[0].nombre:sec.label}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>body{font-family:'Source Sans 3',sans-serif;padding:20px;max-width:800px;margin:0 auto}@media print{@page{margin:1cm}}</style>
+  </head><body>
+  <div style="text-align:center;margin-bottom:20px;border-bottom:2px solid #ea580c;padding-bottom:14px;display:flex;align-items:center;justify-content:center;gap:16px">
+    <img src="${CONFIG.escudo}" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #fdba74"/>
+    <div>
+      <div style="font-size:10px;color:#94a3b8;letter-spacing:2px;text-transform:uppercase">${CONFIG.nombreEscuela} · ${CONFIG.localidad} · ${sec.label}</div>
+      <div style="font-size:20px;font-weight:900;color:#ea580c;font-family:'Playfair Display',serif">Trayectorias Cuidadas · Aprendizajes Significativos</div>
+      <div style="font-size:12px;color:#475569">${CONFIG.directora} · Lic. Gabriela Pafume</div>
+      <div style="font-size:11px;color:#94a3b8">Cortes: Mayo · Agosto · Diciembre · Año ${new Date().getFullYear()}</div>
+    </div>
+  </div>
+  ${ests.map(e=>{const esEsp=!!e.marca;return`<div style="border:1.5px solid ${esEsp?"#f0abfc":"#fdba74"};border-radius:10px;padding:16px;margin-bottom:14px;page-break-inside:avoid;background:${esEsp?"#fdf4ff":"#fff7ed"}">
+    <div style="border-bottom:1px solid ${esEsp?"#f0abfc":"#fdba7444"};padding-bottom:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <div><b style="font-size:15px">${e.apellido}, ${e.nombre}</b>${esEsp?` <span style="background:#a21caf18;color:#a21caf;border:1px solid #a21caf44;border-radius:20px;padding:1px 8px;font-size:10px;font-weight:800">♿ ${e.marca}</span>`:""}<br/><span style="font-size:12px;color:#64748b">${sec.label} · ${CONFIG.nombreEscuela}</span></div>
+      ${e.dni?`<div style="background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:4px 10px;font-size:12px;color:#ea580c;font-weight:700">DNI: ${e.dni}</div>`:""}
+    </div>
+    ${esEsp?`<div style="background:#f5f3ff;border-radius:8px;padding:10px;margin-bottom:10px"><b style="font-size:11px;color:#7c3aed">✍️ NIVEL DE ESCRITURA</b><br/>${CORTES.map(c=>`<span style="font-size:11px;margin-right:12px"><b>${c}:</b> <span style="color:${cN(e["nivel_escritura_ajuste_"+c])}">${e["nivel_escritura_ajuste_"+c]||"—"}</span></span>`).join("")}</div>
+    <div style="margin-bottom:6px"><b style="font-size:11px;color:#a21caf">♿ AJUSTES RAZONABLES · Res. 311/16 CFE</b></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><b style="font-size:11px;color:#4338ca">📚 LENGUA</b>${Object.entries(INDS_AJUSTE.lengua).map(([act,inds])=>`<div style="margin-top:5px"><i style="font-size:10px;color:#6366f1">${act}</i>${inds.map(ind=>`<div style="font-size:10px;margin-top:2px">${ind}: <b style="color:${cA(e.indicadores_ajuste?.["lengua_"+act+"_"+ind])}">${e.indicadores_ajuste?.["lengua_"+act+"_"+ind]||"—"}</b></div>`).join("")}</div>`).join("")}</div>
+      <div><b style="font-size:11px;color:#0369a1">🔢 MATEMÁTICA</b>${Object.entries(INDS_AJUSTE.matematica).map(([act,inds])=>`<div style="margin-top:5px"><i style="font-size:10px;color:#0ea5e9">${act}</i>${inds.map(ind=>`<div style="font-size:10px;margin-top:2px">${ind}: <b style="color:${cA(e.indicadores_ajuste?.["matematica_"+act+"_"+ind])}">${e.indicadores_ajuste?.["matematica_"+act+"_"+ind]||"—"}</b></div>`).join("")}</div>`).join("")}</div>
+    </div>`:`
+    ${["1°","2°","3°"].includes(g)?`<div style="margin-bottom:8px"><b style="font-size:11px;color:#7c3aed">✍️ NIVEL DE ESCRITURA</b><br/>${CORTES.map(c=>`<span style="font-size:11px;margin-right:12px"><b>${c}:</b> <span style="color:${cN(e["escritura_"+c])}">${e["escritura_"+c]||"—"}</span></span>`).join("")}</div>`:""}
+    ${["1°","2°"].includes(g)?`<div style="margin-bottom:8px"><b style="font-size:11px;color:#db2877">📖 NIVEL DE LECTURA</b><br/>${CORTES.map(c=>`<span style="font-size:11px;margin-right:12px"><b>${c}:</b> <span style="color:${cN(e["lectura12_"+c])}">${e["lectura12_"+c]||"—"}</span></span>`).join("")}</div>`:""}
+    ${["3°","4°","5°","6°"].includes(g)?`<div style="margin-bottom:8px"><b style="font-size:11px;color:#0ea5e9">📖 FLUIDEZ</b><br/>${["Velocidad","Precisión","Prosodia"].map(dim=>`<div style="font-size:11px"><b>${dim}:</b> ${CORTES.map(c=>`<span style="margin-right:10px"><b>${c}:</b> <span style="color:${cL(e["fluidez_"+dim+"_"+c])}">${e["fluidez_"+dim+"_"+c]||"—"}</span></span>`).join("")}</div>`).join("")}</div>`:""}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><b style="font-size:11px;color:#4338ca">📚 LENGUA</b>${iL.map(ind=>`<div style="font-size:10px;margin-top:3px">${ind}: <b style="color:${cL(e.indicadores?.["lengua_"+g+"_"+ind])}">${e.indicadores?.["lengua_"+g+"_"+ind]||"—"}</b></div>`).join("")}</div>
+      <div><b style="font-size:11px;color:#0369a1">🔢 MATEMÁTICA</b>${iM.map(ind=>`<div style="font-size:10px;margin-top:3px">${ind}: <b style="color:${cL(e.indicadores?.["matematica_"+g+"_"+ind])}">${e.indicadores?.["matematica_"+g+"_"+ind]||"—"}</b></div>`).join("")}</div>
+    </div>`}
+    ${e.trayectoria?`<div style="margin-top:10px;font-size:11px;color:#64748b;font-style:italic;border-top:1px solid #fdba7444;padding-top:6px">📝 <b>Trayectoria:</b> ${e.trayectoria}</div>`:""}
+  </div>`;}).join("")}
+  </body></html>`);
+  win.document.close();setTimeout(()=>win.print(),600);
+}
+
+async function selSeccion(secId){const sec=SECCIONES_LIST.find(s=>s.id===secId);setState({seccion:sec,tab:"carga",loading:true,busqEst:"",modo:"seccion",filtroMarca:"todos"});const data=await dbGet(`sec-${secId}`);setState({allData:{...STATE.allData,[secId]:data?JSON.parse(data):[]},loading:false});}
+async function irDirectivo(){setState({modo:"directivo",loading:true});const entries=await Promise.all(SECCIONES_LIST.map(s=>dbGet(`sec-${s.id}`).then(d=>[s.id,d?JSON.parse(d):[]])));const o={};entries.forEach(([id,d])=>o[id]=d);setState({allData:o,loading:false});}
+function irInicio(){setState({modo:"inicio",seccion:null,busq:""});}
+function abrirModal(){setState({modal:{mode:"new",est:null}});}
+function editarEst(est){setState({modal:{mode:"edit",est:JSON.parse(JSON.stringify(est))}});}
+function cerrarModal(){setState({modal:null});}
+function confirmarBorrar(est){setState({del:est});}
+function cambiarGrado(grado){STATE.modal={...STATE.modal,est:{...(STATE.modal.est||{}),grado,indicadores:{}}};render();}
+function updateInd(key,val){if(STATE.modal)STATE.modal.est.indicadores={...(STATE.modal.est.indicadores||{}),[key]:val};}
+function updateExtra(key,val){if(STATE.modal)STATE.modal.est={...STATE.modal.est,[key]:val};}
+function updateAjuste(key,val){if(STATE.modal)STATE.modal.est.indicadores_ajuste={...(STATE.modal.est.indicadores_ajuste||{}),[key]:val};}
+function toggleMarca(marca){if(STATE.modal){STATE.modal.est={...STATE.modal.est,marca};render();}}
+
+async function guardarEstudiante(){
+  const m=STATE.modal;
+  const apellido=document.getElementById("m-apellido")?.value.trim()||"";
+  const nombre=document.getElementById("m-nombre")?.value.trim()||"";
+  const grado=document.getElementById("m-grado")?.value||"";
+  const seccion=document.getElementById("m-seccion")?.value||"";
+  const dni=document.getElementById("m-dni")?.value.trim()||"";
+  const trayectoria=document.getElementById("m-trayectoria")?.value.trim()||"";
+  if(!apellido||!nombre){alert("Completá nombre y apellido.");return;}
+  const indicadores={...(m.est?.indicadores||{})};
+  document.querySelectorAll("[data-ind]").forEach(s=>{if(s.value)indicadores[s.dataset.ind]=s.value;});
+  const extras={};document.querySelectorAll("[data-key]").forEach(s=>{if(s.value)extras[s.dataset.key]=s.value;});
+  const indicadores_ajuste={...(m.est?.indicadores_ajuste||{})};
+  document.querySelectorAll("[data-ajuste]").forEach(s=>{if(s.value)indicadores_ajuste[s.dataset.ajuste]=s.value;});
+  const est={...(m.est||{}),...extras,apellido,nombre,grado,seccion,dni,trayectoria,indicadores,indicadores_ajuste,id:m.est?.id||Date.now()};
+  const secId=STATE.seccion.id,prev=STATE.allData[secId]||[];
+  const upd=m.mode==="new"?[...prev,est]:prev.map(e=>e.id===est.id?est:e);
+  setState({modal:null,allData:{...STATE.allData,[secId]:upd}});
+  await dbSet(`sec-${secId}`,JSON.stringify(upd));
+}
+async function borrarEstudiante(){const secId=STATE.seccion.id,upd=(STATE.allData[secId]||[]).filter(e=>e.id!==STATE.del.id);setState({del:null,allData:{...STATE.allData,[secId]:upd}});await dbSet(`sec-${secId}`,JSON.stringify(upd));}
+
+function render(){
+  const r=document.getElementById("root");
+  if(STATE.modo==="inicio")r.innerHTML=vistaInicio();
+  else if(STATE.modo==="seccion")r.innerHTML=vistaSeccion();
+  else if(STATE.modo==="directivo")r.innerHTML=vistaDirectivo();
+}
+if(window.firebaseReady){render();}
+else{document.addEventListener("firebaseReady",render,{once:true});render();}
+</script>
+</body>
+</html>
